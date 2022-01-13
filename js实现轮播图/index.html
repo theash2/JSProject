@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/reset.CSS">
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="./ImgsArray.js"></script>
+    <script>
+        function PointerActive(pointers,index){
+            ResetClass(pointers,"pointer");
+            pointers[index].className =pointers[index].className+" active" ;
+        }
+        function SetTime(slideshow,animations,tip){
+            slideshow.className = "slideshow";
+            // let index =0;
+            let pointers  = document.getElementsByClassName("pointer");
+            let timer = setInterval(function(){   
+                let left =parseInt(getComputedStyle(slideshow)["left"]);
+                if(tip.index ==animations.length-1){ 
+                    SlideShow(slideshow,"left",294,animations[animations.length-1])
+                    tip.index=0;
+                    slideshow.style.left = 0+"px";
+                }else{
+                    SlideShow(slideshow,"left",294,animations[tip.index])                                  
+                    tip.index++;
+                };
+                PointerActive(pointers,tip.index);
+            },3000)
+
+            // console.log("当前图片index:",tip.index)
+            return timer;
+        }
+        window.onload = function(){
+            let slideshow = document.getElementsByClassName("slideshow")[0];
+            let pointers = document.getElementsByClassName("pointers")[0];
+            slideshow.style.width = imgs.length*294+"px";
+            console.log("收到的图片",imgs);
+            imgs.forEach((img,inedx) => {
+                let nodes = createImg(img.src);
+                slideshow.append(nodes[0]);
+                pointers.append(nodes[1]);
+            });
+            pointers.removeChild(document.querySelector(".pointers :last-child"));//最后一张图片和第一张相同,作为过渡,不需要点
+            let animations = ['slideshowAnimation1','slideshowAnimation2','slideshowAnimation3','slideshowAnimation4','slideshowAnimation5','slideshowAnimation6']
+            
+            let tip = document.getElementById("tips");
+            tip.index =0;
+            let btnStart = document.getElementById("StartslideShow");
+            let pointeractives  = document.getElementsByClassName("pointer");
+            PointerActive(pointeractives,0);
+            btnStart.onclick = function(event){                   
+                tip.innerText ="轮播图状态:"+"正在轮播";
+                if(tip.timer ==undefined){ //初次或停止过
+                    if(tip.index==null)tip.index=0; 
+                    tip.timer =  SetTime(slideshow,animations,tip);
+                    console.log("开始后状态:",tip.timer)
+                }
+                
+            }
+            let btnStop = document.getElementById("StopslideShow");
+            btnStop.onclick = function(event){
+                tip.innerText = "轮播图状态:"+"停止轮播";
+                clearInterval(tip.timer);
+                tip.timer = undefined;
+                console.log("状态:",tip.timer)
+            }
+            // 上一张.下一章
+            let pre = document.querySelector(".pre")
+            pre.onclick = function(){
+                let pointers  = document.getElementsByClassName("pointer");
+                clearInterval(tip.timer);
+                if(tip.index == 0){
+                    tip.index = imgs.length-2;
+                }
+                else{
+                    tip.index = tip.index-1;
+                }
+                slideshow.style.left = -(tip.index)*294+"px";
+                PointerActive(pointers,tip.index);
+                tip.timer = SetTime(slideshow,animations,tip);
+            }
+            let next  = document.querySelector(".next")
+            next.onclick = function(){
+                let pointers  = document.getElementsByClassName("pointer");
+                clearInterval(tip.timer);
+                if(tip.index == imgs.length-2){
+                    tip.index = 0;
+                }
+                else{
+                    tip.index = tip.index+1;
+                }
+                slideshow.style.left = -(tip.index)*294+"px";
+                PointerActive(pointers,tip.index);
+                tip.timer = SetTime(slideshow,animations,tip);
+                
+            }
+            //给轮播点添加绑定事件,使用委托
+            pointers.onclick = function(event){
+                let width = parseInt(getComputedStyle(pointers,null)["width"])/(imgs.length-1);
+                let clickPoint = event.layerX;
+                index = Math.trunc(clickPoint/width)
+                slideshow.style.left = -(index)*294+"px";
+                let pointer  = document.getElementsByClassName("pointer");
+                PointerActive(pointer,index);
+                clearInterval(tip.timer);
+                tip.index = index;
+                tip.timer = SetTime(slideshow,animations,tip);
+            }
+        }
+
+    </script>
+    <title>轮播图slideshow</title>
+</head>
+<body>
+    <div class="container">
+        <ul class="slideshow">
+
+        </ul>
+        <div class="pointers">
+
+        </div>
+        <div class="pre Change">上<br/>一<br/>张</div>
+        <div class="next Change">下<br/>一<br/>张</div>
+    </div>
+    <h3 id="tips">轮播图状态:</h3>
+    <button id="StartslideShow">开始轮播</button>
+    <button id="StopslideShow">停止轮播</button>
+</body>
+</html>

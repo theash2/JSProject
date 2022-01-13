@@ -1,0 +1,121 @@
+html{
+    overflow: scroll;
+}
+.container{
+    margin: auto;
+    width: 294px;
+    height: 560px;
+    border: hotpink 1px solid;
+    margin-top: 30px;
+    position: relative;
+    overflow: hidden;
+}
+ul{
+    position: absolute;
+    height: 560px;
+}
+li{
+    float: left;
+}
+.slideshowAnimation1{
+    animation: slideshow1 1s linear;
+}
+.slideshowAnimation2{
+    animation: slideshow2 1s linear;
+}
+.slideshowAnimation3{
+    animation: slideshow3 1s linear;
+}
+.slideshowAnimation4{
+    animation: slideshow4 1s linear;
+}
+.slideshowAnimation5{
+    animation: slideshow5 1s linear;
+}
+.slideshowAnimation6{
+    animation: slideshow6 1s linear;
+}
+@keyframes slideshow1 {
+    from{
+        left:0px
+    }
+    to{
+        left: -294px;
+    }
+}
+@keyframes slideshow2 {
+    from{
+        left:-294px
+    }
+    to{
+        left: -588px;
+    }
+}
+@keyframes slideshow3 {
+    from{
+        left:-588px
+    }
+    to{
+        left: -882px;
+    }
+}
+@keyframes slideshow4 {
+    from{
+        left:-882px
+    }
+    to{
+        left: -1176px;
+    }
+}
+@keyframes slideshow5 {
+    from{
+        left: -1176px;
+    }
+    to{
+        left: -1470px;
+    }
+}
+@keyframes slideshow6 {
+    from{
+        left: -1470px;
+    }
+    to{
+        left: -1764px;
+    }
+}
+.pointers{
+    position: absolute;
+    border: 1px solid #30dc90;
+    right: 0px;
+    bottom: 0px;
+    /* height: 5px; */
+}
+.pointer{
+    /* position: absolute; */
+    float: left;
+    background-color: #9a75ff;
+    width: 10px;
+    height: 10px;
+    margin:0px 5px;
+    border-radius: 50%;
+}
+.pointer:hover,.active{
+    background-color: azure;
+    box-shadow: 1px 1px rgb(190, 185, 185);   
+}
+
+.Change{
+    width: 20%;
+    height: 20%;
+    background-color: #dffff5;
+    position: absolute;
+    top: 35%;
+    z-index: 10;
+    opacity: 0.4;
+}
+.pre{
+    left: 0px;
+}
+.next{
+    right: 0px;
+}
